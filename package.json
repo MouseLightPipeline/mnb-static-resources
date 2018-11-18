@@ -1,0 +1,28 @@
+{
+  "name": "mnb-static-resources",
+  "version": "1.4.0",
+  "main": "dist/app.js",
+  "repository": "https://github.com/MouseLightPipeline/mnb-static-resources.git",
+  "author": "Patrick Edson <pedson@leapscientific.com>",
+  "license": "SEE LICENSE IN LICENSE",
+  "dockerRepository": "mouselightdatabrowser",
+  "dockerImageName": "static-resources",
+  "private": true,
+  "scripts": {
+    "debug": "DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation src/app.js",
+    "start": "DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation app.js",
+    "docker-build": "gulp docker-build",
+    "docker-release": "gulp release"
+  },
+  "dependencies": {
+    "debug": "^4.1.0",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/gulp": "3",
+    "@types/gulp-shell": "^0.0.31",
+    "gulp": "^3.9.1",
+    "gulp-shell": "^0.6.5"
+  }
+}
