@@ -14,4 +14,4 @@ if (process.env.NODE_ENV !== "production") {
     app.use(ServiceOptions.endpoint, express.static("static"));
 }
 
-app.listen(ServiceOptions.port, () => debug(`static resource server is now running on http://${os.hostname()}:${ServiceOptions.port}`));
+app.listen(ServiceOptions.port, () => debug(`listening on http://${os.hostname()}:${ServiceOptions.port}`));
