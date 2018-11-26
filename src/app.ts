@@ -9,9 +9,9 @@ import * as path from "path";
 const app = express();
 
 if (process.env.NODE_ENV !== "production") {
-    app.use("/public", express.static(path.resolve(path.normalize("assets"))));
+    app.use(ServiceOptions.endpoint, express.static(path.resolve(path.normalize("assets"))));
 } else {
-    app.use(express.static("public"));
+    app.use(ServiceOptions.endpoint, express.static("static"));
 }
 
 app.listen(ServiceOptions.port, () => debug(`static resource server is now running on http://${os.hostname()}:${ServiceOptions.port}`));
