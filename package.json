@@ -9,7 +9,7 @@
   "dockerImageName": "static-resources",
   "private": true,
   "scripts": {
-    "debug": "DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation src/app.js",
+    "debug": "tsc && DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation src/app.js",
     "start": "DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation app.js",
     "docker-build": "gulp docker-build",
     "docker-release": "gulp release"
