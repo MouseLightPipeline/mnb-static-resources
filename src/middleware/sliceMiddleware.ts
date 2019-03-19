@@ -1,80 +1,62 @@
-import * as fs from "fs";
-import {Image as ImageJS} from "image-js";
-
-const scaling = 0xFFFF / 265;
-
-enum SlicePlane {
-    Coronal,
-    Horizontal,
-    Sagittal
-}
-
-type Coordinates = [number, number, number]
+import {parseSlicePlaneIdentifier} from "../slice/sampleTomography";
+import {TomographyManager} from "../slice/tomographyManager";
+import {NumericVector2} from "../util/vector";
 
 interface ISliceRequestBody {
-    sampleId?: string;
-    plane?: SlicePlane;
-    coordinates?: Coordinates;
-}
-
-const planeLookup = new Map<SlicePlane, string>();
-planeLookup.set(SlicePlane.Coronal, "coronal");
-planeLookup.set(SlicePlane.Horizontal, "coronal");
-planeLookup.set(SlicePlane.Sagittal, "sagittal");
-
-function locateSlice(request: ISliceRequestBody): string {
-    if (request.sampleId === undefined || request.plane === undefined || request.coordinates === undefined || request.coordinates.length !== 3 || !planeLookup.has(request.plane)) {
-        return null;
-    }
-
-    const index = Math.floor(request.coordinates[2] / 25);
-
-    return `assets/slice/${request.sampleId}/${planeLookup.get(request.plane)}/${index}.png`;
+    id?: string;
+    plane?: number;
+    location?: number;
+    threshold?: [number, number];
+    mask?: boolean;
+    invert?: boolean;
 }
 
 export async function sliceMiddleware(req, res) {
-    const path = locateSlice(req.body);
+    const input: ISliceRequestBody = req.body;
 
-    if (path === null || !fs.existsSync(path)) {
-        res.status(404).send("Not found");
-        return;
+    const tomography = TomographyManager.FindTomography(input.id);
+
+    if (tomography) {
+        const images = await tomography.loadSlice(parseSlicePlaneIdentifier(input.plane), input.location);
+
+        if (images) {
+            res.json({
+                texture: images[0].toBase64("image/png"),
+                mask: images[1].toBase64("image/png")
+            });
+
+            return;
+        }
     }
 
-    const image = await ImageJS.load(path);
+    res.status(404).send("Not found");
+}
 
-    const image2 = await ImageJS.createFrom(image, {});
-
-    for (let idx = 0; idx < image.data.length; idx++) {
-        const shifted = image.data[idx] - 35;
-        image.data[idx] = Math.min((Math.max(shifted, 0)), 300) * scaling;
-        image2.data[idx] = shifted < 0 ? 0 : 0xFFFF;
-    }
-
-    res.json({
-        texture: image.toBase64("image/png"),
-        mask: image2.toBase64("image/png")
-    });
+interface ISliceRequestParams {
+    id?: string;
+    plane?: string;
+    location?: string;
+    threshold?: string;
+    mask?: string;
+    invert?: string;
 }
 
 export async function sliceImageMiddleware(req, res) {
-    const path = locateSlice({
-        sampleId: req.query.sampleId,
-        plane: parseInt(req.query.plane),
-        coordinates: [req.query.x, req.query.y,req.query.z]
-    });
+    const input: ISliceRequestParams = req.query;
 
-    if (path === null || !fs.existsSync(path)) {
-        res.status(404).send("Not found");
-        return;
+    const tomography = TomographyManager.FindTomography(input.id);
+
+    if (tomography) {
+        const images = await tomography.loadSlice(parseSlicePlaneIdentifier(input.plane), parseInt(input.location), parseInt(input.invert) === 1, NumericVector2.parseString(input.threshold));
+
+        if (images) {
+            const mask = parseInt(input.mask) > 0 ? 1 : 0;
+            res.type("png");
+            res.end(new Buffer((images[mask] as any).toBuffer()), "binary");
+
+            return;
+        }
     }
 
-    const image = await ImageJS.load(path);
-
-    for (let idx = 0; idx < image.data.length; idx++) {
-        const shifted = image.data[idx] - 35;
-        image.data[idx] = Math.min((Math.max(shifted, 0)), 300) * scaling;
-    }
-
-    res.type("png");
-    res.end(new Buffer(image.toBuffer()), "binary");
+    res.status(404).send("Not found");
 }

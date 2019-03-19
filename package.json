@@ -1,6 +1,6 @@
 {
   "name": "mnb-static-resources",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "dist/app.js",
   "repository": "https://github.com/MouseLightPipeline/mnb-static-resources.git",
   "author": "Patrick Edson <pedson@leapscientific.com>",
@@ -15,8 +15,10 @@
     "docker-release": "gulp release"
   },
   "dependencies": {
+    "apollo-server-express": "^2.4.8",
     "debug": "^4.1.0",
     "express": "^4.16.4",
+    "graphql": "^14.1.1",
     "image-js": "^0.21.5"
   },
   "devDependencies": {
