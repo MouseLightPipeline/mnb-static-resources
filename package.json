@@ -10,7 +10,7 @@
   "private": true,
   "scripts": {
     "debug": "tsc && DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation src/app.js",
-    "start": "DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation app.js",
+    "start": "gulp build && cd dist && DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation app.js",
     "docker-build": "gulp docker-build",
     "docker-release": "gulp release"
   },

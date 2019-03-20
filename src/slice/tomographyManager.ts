@@ -1,40 +1,55 @@
 import * as path from "path";
 import * as fs from "fs";
 
-import {SampleTomography, SlicePlane} from "./sampleTomography";
-import {parse} from "querystring";
-import {Vector2} from "../util/vector";
+const debug = require("debug")("mnb:static-resources:tomography-manager");
 
-const SliceLocation = `assets/slice/`;
+import {SampleTomography} from "./sampleTomography";
+import {Vector2} from "../util/vector";
+import {ServiceOptions} from "../options/serviceOptions";
 
 export class TomographyManager {
     private static _tomographyIdMap = new Map<string, SampleTomography>();
     private static _tomographyNameMap = new Map<string, SampleTomography>();
 
     public static LoadSampleTomography(source?: string) {
-        const location = source || SliceLocation;
+        const location = source || ServiceOptions.sliceMountPoint;
+
+        if (!fs.existsSync(location)) {
+            debug(`slice root location ${location} does not exist - no tomography metadata will be loaded`);
+            return;
+        }
 
         const files = fs.readdirSync(location).filter(f => {
             return fs.lstatSync(path.join(location, f)).isDirectory();
         });
 
+        let sampleCount = 0;
+
         files.map(f => {
             const dataFile = path.join(location, f, "sampleInfo.json");
 
             if (fs.existsSync(dataFile)) {
-                const data = JSON.parse(fs.readFileSync(dataFile, "utf8"));
+                try {
+                    const data = JSON.parse(fs.readFileSync(dataFile, "utf8"));
 
-                const tomography = new SampleTomography(path.join(location, f), data);
+                    const tomography = new SampleTomography(path.join(location, f), data);
 
-                this._tomographyIdMap.set(tomography.id, tomography);
+                    this._tomographyIdMap.set(tomography.id, tomography);
 
-                this._tomographyNameMap.set(tomography.name, tomography);
+                    this._tomographyNameMap.set(tomography.name, tomography);
 
-                tomography.limits.sagittal = new Vector2<number>(this.findLimits(path.join(location, f, "sagittal")));
-                tomography.limits.horizontal = new Vector2<number>(this.findLimits(path.join(location, f, "horizontal")));
-                tomography.limits.coronal = new Vector2<number>(this.findLimits(path.join(location, f, "coronal")));
+                    tomography.limits.sagittal = new Vector2<number>(this.findLimits(path.join(location, f, "sagittal")));
+                    tomography.limits.horizontal = new Vector2<number>(this.findLimits(path.join(location, f, "horizontal")));
+                    tomography.limits.coronal = new Vector2<number>(this.findLimits(path.join(location, f, "coronal")));
+
+                    sampleCount += 1;
+                } catch (ex) {
+                    debug(`error creating sample tomography for ${dataFile}`);
+                }
             }
         });
+
+        debug(`loading tomography metadata for ${sampleCount} sample(s)`);
     }
 
     public static asList(): SampleTomography[] {

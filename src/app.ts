@@ -23,17 +23,18 @@ app.use(bodyParser.json());
 
 if (process.env.NODE_ENV !== "production") {
     app.use(ServiceOptions.endpoint, express.static(path.resolve(path.normalize("assets"))));
-    app.use("/slice/", sliceMiddleware);
-    app.use("/sliceImage", sliceImageMiddleware);
 } else {
     app.use(ServiceOptions.endpoint, express.static("static"));
 }
 
+app.use("/slice", sliceMiddleware);
+app.use("/sliceImage", sliceImageMiddleware);
+
 const server = new ApolloServer({
     typeDefs: typeDefinitions,
     resolvers,
-    introspection: ServiceOptions.isInternal,
-    playground: ServiceOptions.isInternal,
+    introspection: true, // ServiceOptions.isInternal,
+    playground: true, // ServiceOptions.isInternal,
     context: () => new GraphQLServerContext()
 });
 
