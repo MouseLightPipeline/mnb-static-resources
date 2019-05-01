@@ -96,7 +96,7 @@ export class SampleTomography {
         if (path != null) {
             const threshold = userThreshold || this._threshold;
 
-            const scaling = 0xFFFF / Math.min(threshold.Max, 0xFFFF) - Math.max(threshold.Min, 0);
+            const scaling = 0xFFFF / (Math.min(threshold.Max, 0xFFFF) - Math.max(threshold.Min, 0));
 
             const image = await ImageJS.load(path);
             const maskImage = await ImageJS.createFrom(image, {});
@@ -105,7 +105,6 @@ export class SampleTomography {
                 maskImage.data[idx] = image.data[idx] === 0 ? 0 : 0xFFFF;
                 const shifted = image.data[idx] - threshold.Min;
                 image.data[idx] = Math.min((Math.max(shifted, 0)), threshold.Max) * scaling;
-                // maskImage.data[idx] = shifted <= 0 ? 0 : 0xFFFF;
             }
 
             if (invert) {
