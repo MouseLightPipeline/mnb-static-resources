@@ -33,8 +33,8 @@ app.use("/sliceImage", sliceImageMiddleware);
 const server = new ApolloServer({
     typeDefs: typeDefinitions,
     resolvers,
-    introspection: true, // ServiceOptions.isInternal,
-    playground: true, // ServiceOptions.isInternal,
+    introspection: ServiceOptions.isInternal,
+    playground: ServiceOptions.isInternal,
     context: () => new GraphQLServerContext()
 });
 

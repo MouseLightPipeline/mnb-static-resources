@@ -21,6 +21,8 @@ function loadConfiguration() {
     c.endpoint = process.env.STATIC_RESOURCES_ENDPOINT || c.endpoint;
     c.graphQLEndpoint = process.env.STATIC_API_ENDPOINT || process.env.CORE_SERVICES_ENDPOINT || c.graphQLEndpoint;
     c.sliceMountPoint = process.env.STATIC_SLICE_MOUNT_POINT || process.env.CORE_SERVICES_ENDPOINT || c.sliceMountPoint;
+    c.isInternal = process.env.STATIC_API_IS_INTERNAL === undefined ? true : parseInt(process.env.STATIC_API_IS_INTERNAL) > 0;
+
 
     return c;
 }
