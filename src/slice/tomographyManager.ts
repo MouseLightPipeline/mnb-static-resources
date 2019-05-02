@@ -38,18 +38,22 @@ export class TomographyManager {
 
                     this._tomographyNameMap.set(tomography.name, tomography);
 
-                    tomography.limits.sagittal = new Vector2<number>(this.findLimits(path.join(location, f, "sagittal")));
-                    tomography.limits.horizontal = new Vector2<number>(this.findLimits(path.join(location, f, "horizontal")));
-                    tomography.limits.coronal = new Vector2<number>(this.findLimits(path.join(location, f, "coronal")));
+                    tomography.limits.sagittal = new Vector2<number>(this.findLimits(path.join(location, f, "Sagittal")));
+                    tomography.limits.horizontal = new Vector2<number>(this.findLimits(path.join(location, f, "Horizontal")));
+                    tomography.limits.coronal = new Vector2<number>(this.findLimits(path.join(location, f, "Coronal")));
 
                     sampleCount += 1;
+
+                    debug(`loaded tomography using ${dataFile}`);
+                    debug(tomography);
+
                 } catch (ex) {
                     debug(`error creating sample tomography for ${dataFile}`);
                 }
             }
         });
 
-        debug(`loading tomography metadata for ${sampleCount} sample(s)`);
+        debug(`loaded tomography metadata for ${sampleCount} sample(s)`);
     }
 
     public static asList(): SampleTomography[] {

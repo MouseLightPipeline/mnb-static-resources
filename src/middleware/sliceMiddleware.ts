@@ -1,3 +1,5 @@
+const debug = require("debug")("mnb:static-resources:slice-middleware");
+
 import {parseSlicePlaneIdentifier} from "../slice/sampleTomography";
 import {TomographyManager} from "../slice/tomographyManager";
 import {NumericVector2} from "../util/vector";
