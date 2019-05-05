@@ -104,7 +104,7 @@ export class SampleTomography {
             for (let idx = 0; idx < image.data.length; idx++) {
                 maskImage.data[idx] = image.data[idx] === 0 ? 0 : 0xFFFF;
                 const shifted = image.data[idx] - threshold.Min;
-                image.data[idx] = Math.min((Math.max(shifted, 0)), threshold.Max) * scaling;
+                image.data[idx] = Math.min((Math.max(shifted * scaling, 0)), 0xFFFF);
             }
 
             if (invert) {
