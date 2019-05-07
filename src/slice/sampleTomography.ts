@@ -90,7 +90,7 @@ export class SampleTomography {
         return this._limits;
     }
 
-    public async loadSlice(plane: SlicePlane, location: number, invert: boolean = false, userThreshold?: Threshold): Promise<SliceImageStack> {
+    public async loadSlice(plane: SlicePlane, location: number, invert: boolean = false, userThreshold?: NumericVector2): Promise<SliceImageStack> {
         const path = this.findSlice(plane, location);
 
         if (path != null) {

@@ -19,7 +19,7 @@ export async function sliceMiddleware(req, res) {
     const tomography = TomographyManager.FindTomography(input.id);
 
     if (tomography) {
-        const images = await tomography.loadSlice(parseSlicePlaneIdentifier(input.plane), input.location);
+        const images = await tomography.loadSlice(parseSlicePlaneIdentifier(input.plane), input.location, input.invert, new NumericVector2(input.threshold));
 
         if (images) {
             res.json({
