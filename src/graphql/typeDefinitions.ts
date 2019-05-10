@@ -33,7 +33,6 @@ type Query {
     tomographyMetadata: [TomographyMetadata!]
 }
 
-
 schema {
   query: Query
 }`;
