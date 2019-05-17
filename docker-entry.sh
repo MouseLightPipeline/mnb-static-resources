@@ -8,4 +8,4 @@ wait
 
 export DEBUG=mnb*
 
-node app.js >> /var/log/mnb/static-resources-${logName}.log 2>&1
+node app.js >> /var/log/mnb/${HOSTNAME}-${logName}.log 2>&1
