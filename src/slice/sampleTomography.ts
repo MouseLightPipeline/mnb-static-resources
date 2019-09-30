@@ -166,3 +166,4 @@ sampleIdNameMap["2018-06-14"] = "b52f5456-0a89-4b2c-87f0-f138c710052c";
 sampleIdNameMap["2018-07-02"] = "8863c227-5a76-4c09-9558-3d74be0f4ec0";
 sampleIdNameMap["2018-08-01"] = "ffd28be1-3815-4d15-957d-8a9a6de95719";
 sampleIdNameMap["2018-10-01"] = "ed0d5f76-7e53-4051-81fc-16f4ea7b523c";
+sampleIdNameMap["2018-12-01"] = '79e043dd-b49c-4b9d-8878-4ca0e5fbcbaa';
