@@ -1,10 +1,8 @@
-FROM node:8.12
+FROM node:12.19
 
 WORKDIR /app
 
 COPY dist .
-
-RUN yarn global add sequelize-cli
 
 RUN yarn install --production=true
 

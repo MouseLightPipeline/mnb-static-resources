@@ -1,6 +1,6 @@
 {
   "name": "mnb-static-resources",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "main": "dist/app.js",
   "repository": "https://github.com/MouseLightPipeline/mnb-static-resources.git",
   "author": "Patrick Edson <pedson@leapscientific.com>",
@@ -9,10 +9,13 @@
   "dockerImageName": "static-resources",
   "private": true,
   "scripts": {
-    "debug": "tsc && DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation src/app.js",
-    "start": "gulp build && cd dist && DEBUG=mnb:* node $NODE_DEBUG_OPTION --trace-deprecation app.js",
-    "docker-build": "gulp docker-build",
-    "docker-release": "gulp release"
+    "debug": "node --trace-deprecation src/app.js",
+    "start": "tsc && gulp build && cd dist && node --trace-deprecation app.js",
+    "clean": "tsc && gulp clean",
+    "compile": "tsc && gulp compile",
+    "build": "tsc && gulp build",
+    "docker-build": "tsc && gulp docker-build",
+    "docker-release": "tsc && gulp release"
   },
   "dependencies": {
     "apollo-server-express": "^2.4.8",
@@ -23,11 +26,13 @@
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
-    "@types/gulp": "3",
+    "@types/gulp": "^4.0.7",
     "@types/gulp-shell": "^0.0.31",
     "@types/jimp": "^0.2.28",
-    "gulp": "^3.9.1",
+    "del": "^6.0.0",
+    "gulp": "^4.0.2",
     "gulp-shell": "^0.6.5",
-    "jimp": "^0.6.0"
+    "jimp": "^0.6.0",
+    "merge-stream": "^2.0.0"
   }
 }
