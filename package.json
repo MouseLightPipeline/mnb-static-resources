@@ -1,6 +1,6 @@
 {
   "name": "mnb-static-resources",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "main": "dist/app.js",
   "repository": "https://github.com/MouseLightPipeline/mnb-static-resources.git",
   "author": "Patrick Edson <pedson@leapscientific.com>",
